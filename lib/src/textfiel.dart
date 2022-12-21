@@ -3,9 +3,12 @@
 // found in the LICENSE file.
 
 import 'dart:convert';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_nodejs/src/landing.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CupertinoTextFieldDemo extends StatelessWidget {
   const CupertinoTextFieldDemo({Key? key}) : super(key: key);
@@ -52,10 +55,14 @@ class CupertinoTextFieldDemo extends StatelessWidget {
               ),
             ),
             TextButton.icon(
-                onPressed: () {
-                  print(email);
-                  print(password);
-                 signup(email, password);
+                onPressed: () async {
+                  signup(email, password);
+                  SharedPreferences pref =
+                      await SharedPreferences.getInstance();
+                  String? token = pref.getString("token");
+                  if (token != null) {
+                    Navigator.pushNamed(context, LandingScreen.id);
+                  }
                 },
                 icon: Icon(Icons.save),
                 label: Text('Sign UP'))
@@ -66,25 +73,23 @@ class CupertinoTextFieldDemo extends StatelessWidget {
   }
 }
 
+
 signup(email, password) async {
-  var url = "localhost:3000/signup";
+  var url = "http://localhost:3000/signup";
   final http.Response response = await http.post(
     Uri.parse(url),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, String>{
-      'email':  email,
+      'email': email,
       'password': password,
     }),
   );
   print(response.body);
-//   if (response.statusCode == 201) {
-//     // If the server did return a 201 CREATED response,
-//     // then parse the JSON.
-//   } else {
-//     // If the server did not return a 201 CREATED response,
-//     // then throw an exception.
-//     throw Exception('Failed to create album.');
-//   }
+  SharedPreferences pref = await SharedPreferences.getInstance();
+
+  var parse = jsonDecode(response.body);
+  // print(parse["token"]);
+  await pref.setString('token', parse["token"]);
 }

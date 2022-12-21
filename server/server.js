@@ -13,14 +13,15 @@ app.use(express.json({extended:false}));
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
-
+//model 
+var schema = new mongoose.Schema({ email: "string", password: "string" });
+  var User = mongoose.model("User", schema);
 // signup route api
 app.post("/signup", async (req, res) => {
   let { email, password } = req.body;
   console.log(email);
   console.log(password);
-  var schema = new mongoose.Schema({ email: "string", password: "string" });
-  var User = mongoose.model("User", schema);
+  
 
   let user = new User({
     email,
