@@ -64,7 +64,7 @@ class CupertinoTextFieldDemo extends StatelessWidget {
             ),
             TextButton.icon(
                 onPressed: () async {
-                  signup(email, password);
+                 await  signup(email, password);
                   SharedPreferences pref =
                       await SharedPreferences.getInstance();
                   String? token = pref.getString("token");

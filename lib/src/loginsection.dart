@@ -55,7 +55,7 @@ class LoginSection extends StatelessWidget {
               ),
               TextButton.icon(
                   onPressed: () async {
-                    login(email, password);
+                    await login(email, password);
                     SharedPreferences pref =
                         await SharedPreferences.getInstance();
                     String? token = pref.getString("token");
