@@ -7,16 +7,24 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nodejs/src/landing.dart';
+import 'package:flutter_nodejs/src/loginsection.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CupertinoTextFieldDemo extends StatelessWidget {
-  const CupertinoTextFieldDemo({Key? key}) : super(key: key);
-
+  var email;
+  var password;
   @override
   Widget build(BuildContext context) {
-    var email;
-    var password;
+    checkToken() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("token");
+      if (token != null) {
+        Navigator.pushNamed(context, LandingScreen.id);
+      }
+    }
+
+    checkToken();
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,
@@ -65,14 +73,18 @@ class CupertinoTextFieldDemo extends StatelessWidget {
                   }
                 },
                 icon: Icon(Icons.save),
-                label: Text('Sign UP'))
+                label: Text('Sign UP')),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginSection.id);
+                },
+                child: Text("Login"))
           ],
         ),
       ),
     );
   }
 }
-
 
 signup(email, password) async {
   var url = "http://localhost:3000/signup";

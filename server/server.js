@@ -34,7 +34,19 @@ app.post("/signup", async (req, res) => {
   // check db for email if email say the email is already taken
   //   return res.send("Signup api route");
 });
-
+// login route api
+app.post("/login", async (req, res) => {
+  let { email, password } = req.body;
+  console.log(email);
+  let user = await User.findOne({email});
+  console.log(user);
+  if(user.password !== password){
+    return res.json({msg:"password is not correct"});
+  }
+  return res.json({ token: "12345678911" });
+  // check db for email if email say the email is already taken
+  //   return res.send("Signup api route");
+});
 app.listen(3000, () => {
   console.log(`Example app listening on port 3000`);
 })

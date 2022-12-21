@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_nodejs/src/landing.dart';
+import 'package:flutter_nodejs/src/loginsection.dart';
 import 'package:flutter_nodejs/src/textfiel.dart';
 
 void main() {
@@ -14,7 +15,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: CupertinoTextFieldDemo(),
-      routes: {LandingScreen.id: (context) => LandingScreen()},
+      routes: {
+        LandingScreen.id: (context) => LandingScreen(),
+                LoginSection.id: (context) => LoginSection(),
+
+        },
     );
   }
 }
